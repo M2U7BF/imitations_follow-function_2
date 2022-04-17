@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<div class="follow-flame">
+    <div class="follow_button">
+        <a id="follow-a-{{ user.id }}" onclick="api_follow_{{ user.id }}()"><span id="follow_button_word">フォロー</span> <span id="follow_count-{{ user.id }}">{{ user.follow_num }}</span></a>
+    </div>
+    
+  </div>
+
+
+  <script>
+    // api_follow関数が設定されたaタグがクリックされたら、非同期通信でfollowのカウントを1増やし画面に結果を反映する
+function api_follow_{{ user.id}}() {
+    // いいねの数を増やす記事idをJavaScriptに渡す処理
+    let api_url = "{% url 'follow' user.id %}"; //urls.py指定のname参照
+    let btn = document.getElementById("follow_count-{{ user.id }}");
+    // 非同期通信をするための関数をインタンス化する
+    let request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        // 非同期通信が完了したら以下のifが処理される。request.readyState === 4部分が非同期処理完了を意味している
+        if (request.readyState === 4 && request.status === 200) {
+            let received_data = JSON.parse(request.responseText);
+            // 画面にいいねの数を反映する
+            btn.innerText = received_data.follow_num;
+            // 画面をリロードするまでボタンを押せなくする処理
+            document.getElementById("follow-a-{{ user.id }}").removeAttribute( "onclick" );
+            
+        }
+    }
+    // サーバーとの通信を実行する処理
+    request.open("GET",api_url);
+    request.send();
+}
+
+</script>

@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class MyPageView(DetailView):
+class MyPageView(LoginRequiredMixin, DetailView):
     template_name = 'my_home.html'
     model = ArticleModel
 
@@ -50,8 +50,7 @@ class MyPageView(DetailView):
             )
         return objs
 
-# Create your views here.
-class HomePageView(DetailView):
+class HomePageView(LoginRequiredMixin, DetailView):
     template_name = '_main.html'
     model = ArticleModel
 
@@ -90,7 +89,7 @@ class HomePageView(DetailView):
             )
         return objs
 
-class index_view(TemplateView):
+class index_view(LoginRequiredMixin, TemplateView):
     template_name="index.html"
 
     def get_context_data(self, **kwargs):
@@ -98,7 +97,7 @@ class index_view(TemplateView):
         ctxt["user_list"] = User.objects.all()
         return ctxt
 
-class ArticleCreateView(CreateView):
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create_article.html'
     model = ArticleModel
     fields = ('posted_text','posted_by')
