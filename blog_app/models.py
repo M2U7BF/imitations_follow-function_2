@@ -9,7 +9,7 @@ import uuid
 # 記事
 class ArticleModel(models.Model):
     # 投稿者
-    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='投稿者')
+    posted_by = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='投稿者')
     # 投稿内容
     posted_text = models.CharField(max_length=200,default="テキスト")
     # 投稿日時
